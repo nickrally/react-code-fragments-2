@@ -2,8 +2,8 @@ import React from "react";
 import ErrorBoundary, { Fallback } from "./error-handling";
 
 const Clock = () => {
-  const badClockPath = "BadClock";
-  const goodClockPath = "GoodClock";
+  const badClockPath = "./BadClock";
+  const goodClockPath = "./GoodClock";
 
   const pathToBool = (componentPath) => {
     switch (componentPath) {
@@ -27,22 +27,21 @@ const Clock = () => {
     }
   };
 
-  const setInit = () => {
-    const initPath = `./${boolToPath(false)}`;
-    const initPathBool = pathToBool(initPath.split("/")[1]);
-    console.log(initPath, initPathBool);
-    return initPath;
-  };
-  const [path, setPath] = React.useState(setInit);
+  const badClockText = "This is a BadClock. Click to load GoodClock";
+  const goodClockText = "This is a GoodClock. Click to break it.";
+
+  const boolToButtonText = (bool) => (bool ? goodClockText : badClockText);
+
+  const [path, setPath] = React.useState(() => boolToPath(false));
+  const [btnText, setBtnTxt] = React.useState(badClockText);
 
   const toggleClock = () => {
-    const goodOrBad = pathToBool(path.split("/")[1]);
-    console.log("goodOrBad", goodOrBad);
-    setPath(`./${boolToPath(!goodOrBad)}`);
+    const goodOrBad = pathToBool(path);
+    setPath(boolToPath(!goodOrBad));
+    setBtnTxt(boolToButtonText(!goodOrBad));
   };
 
   const getComponent = () => {
-    console.log("getComponent!");
     const Component = React.lazy(() => import(`${path}`));
     return (
       <React.Suspense fallback={<div>Loading...</div>}>
@@ -53,7 +52,7 @@ const Clock = () => {
 
   return (
     <>
-      <button onClick={toggleClock}>toggle clocks - one of them works</button>
+      <button onClick={toggleClock}>{btnText}</button>
       <ErrorBoundary key={path} Fallback={Fallback}>
         {getComponent()}
       </ErrorBoundary>
