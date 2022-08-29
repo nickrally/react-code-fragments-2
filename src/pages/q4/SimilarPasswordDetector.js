@@ -1,3 +1,4 @@
+//import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const allVowels = ["a", "e", "i", "o", "u"];
@@ -9,6 +10,8 @@ const SimilarPasswordDetector = () => {
     formState: { errors },
   } = useForm({ defaultValues: { password: "hack" } });
 
+  //const [number, setNumber] = useState(-1);
+
   const countMinimumOperations = (password) => {
     let steps = 0;
     let isSimilar = false;
@@ -17,8 +20,9 @@ const SimilarPasswordDetector = () => {
       ? Array.from(password).filter((c) => !vowels.includes(c))
       : Array.from(password);
     const diff = vowels ? consonants.length - vowels.length : consonants.length;
-    if (diff === 0) isSimilar = true; //already similar
-    else if (diff > 0) {
+    if (diff === 0) {
+      isSimilar = true;
+    } else if (diff > 0) {
       //change some consonant(s) to vowel(s)
       for (let i = 0; i < consonants.length - 1; i++) {
         const prevChar = String.fromCharCode(consonants[i].charCodeAt() - 1);
@@ -66,13 +70,20 @@ const SimilarPasswordDetector = () => {
     return isSimilar ? 0 : steps > 0 ? steps : -1; //e.g. "zzzz" returns -1
   };
 
-  const parseSubmitData = ({ password }) => {
-    console.log(countMinimumOperations(password));
+  const parseData = ({ password }) => {
+    const minNumberOfOps = countMinimumOperations(password);
+    const message =
+      minNumberOfOps === -1
+        ? "Incrementing or decrementing letters did not make password more similar"
+        : minNumberOfOps === 0
+        ? "Already similar"
+        : "";
+    alert(`Minimum number of operations: ${minNumberOfOps}.\n${message}`);
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit((data) => parseSubmitData(data))}>
+      <form onSubmit={handleSubmit((data) => parseData(data))}>
         <input
           {...register("password", {
             required: "This is required",
