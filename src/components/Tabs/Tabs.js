@@ -3,11 +3,12 @@ import WhatIsOutput from "../../pages/q1/WhatIsOutput";
 import DiffWaysToColor from "../../pages/q2/DiffWaysToColor";
 import Clock from "../../pages/q3/Clock";
 import Blank from "../../pages/blank/Blank";
+import SimilarPasswordDetector from "../../pages/q4/SimilarPasswordDetector";
 import "./Tabs.css";
 
 const Tabs = () => {
   const [activeTag, setActiveTab] = useState("Blank");
-  const pages = ["Q1", "Q2", "Q3", "Blank"];
+  const pages = ["Q1", "Q2", "Q3", "Q4", "Blank"];
 
   const handleClick = (page) => {
     setActiveTab(page);
@@ -21,6 +22,8 @@ const Tabs = () => {
         return <DiffWaysToColor />;
       case "Q3":
         return <Clock />;
+      case "Q4":
+        return <SimilarPasswordDetector />;
       default:
         return <Blank />;
     }
