@@ -1,4 +1,3 @@
-//import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const allVowels = ["a", "e", "i", "o", "u"];
@@ -9,8 +8,6 @@ const SimilarPasswordDetector = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues: { password: "hack" } });
-
-  //const [number, setNumber] = useState(-1);
 
   const countMinimumOperations = (password) => {
     let steps = 0;
